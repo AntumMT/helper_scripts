@@ -1,0 +1,87 @@
+# Common variables & instructions for mtserver-main & mtserver-testing scripts
+
+# CC0 LICENSE BOILERPLATE
+#
+#  To the extent possible under law, the person who associated CC0 with
+#  this file has waived all copyright and related or neighboring rights
+#  to this file.
+#
+#  You should have received a copy of the CC0 legalcode along with this
+#  work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+
+
+ARGS=$@
+
+MTROOT=/usr/share/minetest
+MTEXEC=/usr/bin/minetest
+
+WORLD="${WORLD_ROOT}/${WORLD_NAME}"
+CONFIG="${DATA_ROOT}/minetest.conf"
+LOG="${DATA_ROOT}/server.log"
+
+if [ "${GAME}" == "antum" ]; then
+    LOG="${DATA_ROOT}/logs/server-$(show-date).log"
+    if [ ! -d "${DATA_ROOT}/logs" ]; then
+        mkdir -p "${DATA_ROOT}/logs"
+    fi
+elif [ "${GAME}" == "antum-testing" ]; then
+    CONFIG="${CONFIG}.example"
+fi
+
+SERVER_EXEC_COMMAND="${MTEXEC} --server --config ${CONFIG} --gameid ${GAME} --world ${WORLD} --port ${PORT} --logfile ${LOG} ${ARGS}"
+
+
+# Tests
+
+printf "\nTesting for minetest executable ..."
+if [ -f "${MTEXEC}" ] && [ -x "${MTEXEC}" ]; then
+    printf "\t${MTEXEC}\n"
+else
+    printf "\tNO\n"
+    exit 1
+fi
+
+printf "Testing for game ..."
+if [ -d "${MTROOT}/games/${GAME}" ]; then
+    printf "\t\t\t${MTROOT}/games/${GAME}\n"
+else
+    printf "\t\tNO\n"
+    exit 1
+fi
+
+printf "Testing for data root ..."
+if [ -d "${DATA_ROOT}" ]; then
+    printf "\t\t${DATA_ROOT}\n"
+else
+    printf "\t\tNO\n"
+    exit 1
+fi
+
+printf "Testing for configuration file ..."
+if [ -f "${CONFIG}" ]; then
+    printf "\t${CONFIG}\n"
+else
+    printf "\tNO\n"
+    exit 1
+fi
+
+printf "Checking for world data ..."
+if [ -d "${WORLD}" ]; then
+    printf "\t\tusing existing world: ${WORLD}\n"
+else
+    printf "\t\tcreating new world: ${WORLD}\n"
+fi
+
+printf "Checking for log file ..."
+if [ -f "${LOG}" ]; then
+    printf "\t\tusing existing log: ${LOG}\n"
+else
+    printf "\t\tcreating new log: ${LOG}\n"
+fi
+
+printf "Using port:\t\t\t\t${PORT}\n"
+
+
+printf "Executing minetest ...\n\n"
+${SERVER_EXEC_COMMAND}
+
