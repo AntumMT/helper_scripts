@@ -16,7 +16,11 @@ import codecs, os, sys
 
 
 def show_usage():
-	print('\nUsage:\n\t{} <source> <target>'.format(os.path.basename(sys.argv[0])))
+	usage = '\nUsage:\n\t{} [-h|-s] <source> <target>' \
+		+ '\n\nOptions:' \
+		+ '\n\t-t  Show this help message.' \
+		+ '\n\t-s  Denotes that source file is settingtypes.txt formatted.'
+	print(usage.format(os.path.basename(sys.argv[0])))
 
 def message(mode, msg):
 	sys.stdout.write('\n[{}] {}\n'.format(mode, msg))
@@ -30,13 +34,24 @@ def msgW(msg):
 def msgE(msg):
 	message('ERROR', msg)
 
-if len(sys.argv) != 3:
+args = sys.argv[1:]
+
+if len(sys.argv) < 2:
 	msgE("Not enough arguments")
 	show_usage()
 	sys.exit(1)
 
-CFG_SOURCE = sys.argv[1]
-CFG_TARGET = sys.argv[2]
+if "-h" in args:
+	show_usage()
+	sys.exit(0)
+
+settingtypes = False
+if args[0] == "-s":
+	settingtypes = True
+	args.pop(0)
+
+CFG_SOURCE = args[0]
+CFG_TARGET = args[1]
 
 
 # Check for existing source configuration
@@ -82,10 +97,6 @@ CFG_TGT_DATA = codecs.open(CFG_TARGET, 'r', encoding='utf8')
 tgt_lines = CFG_TGT_DATA.read().split('\n')
 CFG_TGT_DATA.close()
 
-src_lines_copy = tuple(src_lines)
-# Clear the original list
-src_lines = []
-
 msgS('Comparing target against source configuration ...')
 
 def targetContainsKey(line):
@@ -107,14 +118,47 @@ def targetContainsKey(line):
 
 	return False
 
-l = 0
-for LINE in src_lines_copy:
-	l += 1
+def parseConf(lines):
+	msgS('Parsing config formatted source')
 
-	# Comments are delimited by a hashtag followed with whitespace
-	if LINE and '=' in LINE and not LINE.startswith('# ') and not LINE.startswith('#\t'):
-		if not targetContainsKey(LINE):
-			src_lines.append(LINE)
+	ret = []
+
+	for LINE in lines:
+		# Comments are delimited by a hashtag followed with whitespace
+		if LINE and '=' in LINE and not LINE.startswith('# ') and not LINE.startswith('#\t'):
+			if not targetContainsKey(LINE):
+				ret.append(LINE)
+
+	return tuple(ret)
+
+def parseSetTypes(lines):
+	msgS('Parsing settingtypes formatted source')
+
+	ret = []
+
+	for LINE in lines:
+		LINE = LINE.strip()
+		if len(LINE) > 0 and not LINE.startswith('#') and not LINE.startswith('['):
+			key = LINE.split(' ')[0]
+			value = LINE.split(') ')[-1].split(' ')
+			if len(value) < 2:
+				if value[0] == "string":
+					value = ""
+				else:
+					msgW('Missing value for: {}'.format(key))
+					continue
+			else:
+				value = value[1]
+
+			if not targetContainsKey(key):
+				ret.append('#{} = {}'.format(key, value))
+
+	return tuple(ret)
+
+if settingtypes:
+	src_lines = parseSetTypes(src_lines)
+else:
+	src_lines = parseConf(src_lines)
 
 if src_lines:
 	msgS('Writing new lines to target configuration ...')
