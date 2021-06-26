@@ -42,18 +42,18 @@ else:
 CFG_TARGET_DIR = os.path.dirname(CFG_TARGET)
 if not os.path.isdir(CFG_TARGET_DIR):
 	msgW('Target configuration directory does not exist, a new directory will be created.\n\t{}'.format(CFG_TARGET_DIR))
-	
+
 	# Create the target directory
 	os.makedirs(CFG_TARGET_DIR)
 
 # Check for non-existing target configuration
 if not os.path.isfile(CFG_TARGET):
 	msgW('Target configuration file not found, a new file will be created:\n\t{}'.format(CFG_TARGET))
-	
+
 	# Create a new, empty configuration file
 	CFG_TEXT = codecs.open(CFG_TARGET, 'wt')
 	CFG_TEXT.close()
-	
+
 	if os.path.isfile(CFG_TARGET):
 		msgS('Configuration file created.')
 	else:
@@ -82,26 +82,26 @@ msgS('Comparing target against source configuration ...')
 def targetContainsKey(line):
 	if line in tgt_lines:
 		return True
-	
+
 	else:
-	    src_key = line
-	    if '=' in src_key:
-	        src_key = src_key.split('=')[0].lstrip(' #\t').rstrip()
-		
-		for TLINE in tgt_lines:
-		    tgt_key = TLINE
-		    if '=' in tgt_key:
-		        tgt_key = tgt_key.split('=')[0].lstrip(' #\t').rstrip()
-		    
-			if src_key == tgt_key:
-				return True
-	
+		src_key = line
+		if '=' in src_key:
+			src_key = src_key.split('=')[0].lstrip(' #\t').rstrip()
+
+			for TLINE in tgt_lines:
+				tgt_key = TLINE
+				if '=' in tgt_key:
+					tgt_key = tgt_key.split('=')[0].lstrip(' #\t').rstrip()
+
+					if src_key == tgt_key:
+						return True
+
 	return False
 
 l = 0
 for LINE in src_lines_copy:
 	l += 1
-	
+
 	# Comments are delimited by a hashtag followed with whitespace
 	if LINE and '=' in LINE and not LINE.startswith('# ') and not LINE.startswith('#\t'):
 		if not targetContainsKey(LINE):
@@ -115,7 +115,7 @@ if src_lines:
 		# Skip empty lines
 		if LT:
 			key = LT.lstrip('#').split('=')[0].strip()
-			
+
 			s_index = 0
 			s_removes = []
 			for LS in src_lines:
@@ -123,30 +123,29 @@ if src_lines:
 					msgS('Not replacing old setting:\n\t{} -> {}'.format(LT, LS))
 					#tgt_lines[t_index] = LS
 					s_removes.append(s_index)
-					
+
 					break
-				
+
 				s_index += 1
-			
+
 			t_index += 1
-			
+
 			# Remove lines that are already in config with differenc value
 			for INDEX in reversed(s_removes):
 				src_lines.pop(INDEX)
 	'''
-	
+
 	# Show message about new settings
 	msgS('New settings:')
 	for LS in src_lines:
 		print('\t{}'.format(LS))
-	
+
 	tgt_text = '\n'.join(tgt_lines).strip(' \n\t')
 	src_text = '\n'.join(src_lines).strip(' \n\t')
-	
+
 	CFG_TGT_DATA = codecs.open(CFG_TARGET, 'wt')
 	CFG_TGT_DATA.write('\n'.join([tgt_text, '\n# ----- NEWLY ADDED -----\n', src_text]).strip() + '\n\n')
 	CFG_TGT_DATA.close()
 
 else:
 	msgS('Target configuration is unchanged.')
-
