@@ -144,7 +144,7 @@ if src_lines:
 	src_text = '\n'.join(src_lines).strip(' \n\t')
 
 	CFG_TGT_DATA = codecs.open(CFG_TARGET, 'w', encoding='utf8')
-	CFG_TGT_DATA.write('\n'.join([tgt_text, '\n# ----- NEWLY ADDED -----\n', src_text]).strip() + '\n\n')
+	CFG_TGT_DATA.write('\n'.join([tgt_text, '\n# ----- NEWLY ADDED -----\n', src_text]).strip() + '\n')
 	CFG_TGT_DATA.close()
 
 else:
