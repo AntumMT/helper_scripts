@@ -97,13 +97,13 @@ def targetContainsKey(line):
 		if '=' in src_key:
 			src_key = src_key.split('=')[0].lstrip(' #\t').rstrip()
 
-			for TLINE in tgt_lines:
-				tgt_key = TLINE
-				if '=' in tgt_key:
-					tgt_key = tgt_key.split('=')[0].lstrip(' #\t').rstrip()
+		for TLINE in tgt_lines:
+			tgt_key = TLINE
+			if '=' in tgt_key:
+				tgt_key = tgt_key.split('=')[0].lstrip(' #\t').rstrip()
 
-					if src_key == tgt_key:
-						return True
+				if src_key == tgt_key:
+					return True
 
 	return False
 
