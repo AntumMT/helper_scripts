@@ -118,6 +118,19 @@ def targetContainsKey(line):
 
 	return False
 
+deprecated = []
+for line in tgt_lines:
+	if '=' in line:
+		key = line.split('=')[0].lstrip(' \t#').rstrip()
+		if not key in deprecated:
+			deprecated.append(key)
+
+def updateDeprecated(line):
+	key = line.lstrip('#').split('=')[0].strip()
+
+	while key in deprecated:
+		deprecated.pop(deprecated.index(key))
+
 def parseConf(lines):
 	msgS('Parsing config formatted source')
 
@@ -125,9 +138,12 @@ def parseConf(lines):
 
 	for LINE in lines:
 		# Comments are delimited by a hashtag followed with whitespace
-		if LINE and '=' in LINE and not LINE.startswith('# ') and not LINE.startswith('#\t'):
+		if LINE and '=' in LINE and not LINE.startswith('# ') and not LINE.startswith('#\t') \
+				and not LINE.startswith('##'):
 			if not targetContainsKey(LINE):
 				ret.append(LINE)
+
+			updateDeprecated(LINE)
 
 	return tuple(ret)
 
@@ -150,8 +166,11 @@ def parseSetTypes(lines):
 			else:
 				value = value[1]
 
+			new_line = '#{} = {}'.format(key, value)
 			if not targetContainsKey(key):
-				ret.append('#{} = {}'.format(key, value))
+				ret.append(new_line)
+
+			updateDeprecated(new_line)
 
 	return tuple(ret)
 
@@ -159,6 +178,13 @@ if settingtypes:
 	src_lines = parseSetTypes(src_lines)
 else:
 	src_lines = parseConf(src_lines)
+
+
+if deprecated:
+	msgS('{} potentially deprecated settings:'.format(len(deprecated)))
+	for set in deprecated:
+		print('  {}'.format(set))
+
 
 if src_lines:
 	msgS('Writing new lines to target configuration ...')
