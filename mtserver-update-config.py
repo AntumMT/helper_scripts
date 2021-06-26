@@ -14,8 +14,9 @@
 
 import codecs, os, sys
 
-CFG_SOURCE = '{}/Games/Minetest/games/antum/minetest.conf.example'.format(os.getenv('HOME'))
-CFG_TARGET = '{}/Games/Minetest/server/config/Antum/minetest.conf'.format(os.getenv('HOME'))
+
+def show_usage():
+	print('\nUsage:\n\t{} <source> <target>'.format(os.path.basename(sys.argv[0])))
 
 def message(mode, msg):
 	sys.stdout.write('\n[{}] {}\n'.format(mode, msg))
@@ -29,10 +30,18 @@ def msgW(msg):
 def msgE(msg):
 	message('ERROR', msg)
 
+if len(sys.argv) != 3:
+	msgE("Not enough arguments")
+	show_usage()
+	sys.exit(1)
+
+CFG_SOURCE = sys.argv[1]
+CFG_TARGET = sys.argv[2]
+
 
 # Check for existing source configuration
 if not os.path.isfile(CFG_SOURCE):
-	msgE('Source configuration does not exits, exiting ...')
+	msgE('Source configuration does not exist, exiting ...')
 	print('\t{}'.format(CFG_SOURCE))
 	sys.exit(1)
 else:
