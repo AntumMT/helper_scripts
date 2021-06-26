@@ -51,7 +51,7 @@ if not os.path.isfile(CFG_TARGET):
 	msgW('Target configuration file not found, a new file will be created:\n\t{}'.format(CFG_TARGET))
 
 	# Create a new, empty configuration file
-	CFG_TEXT = codecs.open(CFG_TARGET, 'wt')
+	CFG_TEXT = codecs.open(CFG_TARGET, 'w', encoding='utf8')
 	CFG_TEXT.close()
 
 	if os.path.isfile(CFG_TARGET):
@@ -63,13 +63,13 @@ if not os.path.isfile(CFG_TARGET):
 # Read source config
 msgS('Reading source configuration file ...')
 
-CFG_SRC_DATA = codecs.open(CFG_SOURCE, 'rt')
+CFG_SRC_DATA = codecs.open(CFG_SOURCE, 'r', encoding='utf8')
 src_lines = CFG_SRC_DATA.read().split('\n')
 CFG_SRC_DATA.close()
 
 msgS('Reading target configuration file ...')
 
-CFG_TGT_DATA = codecs.open(CFG_TARGET, 'rt')
+CFG_TGT_DATA = codecs.open(CFG_TARGET, 'r', encoding='utf8')
 tgt_lines = CFG_TGT_DATA.read().split('\n')
 CFG_TGT_DATA.close()
 
@@ -143,7 +143,7 @@ if src_lines:
 	tgt_text = '\n'.join(tgt_lines).strip(' \n\t')
 	src_text = '\n'.join(src_lines).strip(' \n\t')
 
-	CFG_TGT_DATA = codecs.open(CFG_TARGET, 'wt')
+	CFG_TGT_DATA = codecs.open(CFG_TARGET, 'w', encoding='utf8')
 	CFG_TGT_DATA.write('\n'.join([tgt_text, '\n# ----- NEWLY ADDED -----\n', src_text]).strip() + '\n\n')
 	CFG_TGT_DATA.close()
 
