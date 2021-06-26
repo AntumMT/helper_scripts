@@ -118,31 +118,6 @@ for LINE in src_lines_copy:
 
 if src_lines:
 	msgS('Writing new lines to target configuration ...')
-	'''
-	t_index = 0
-	for LT in tgt_lines:
-		# Skip empty lines
-		if LT:
-			key = LT.lstrip('#').split('=')[0].strip()
-
-			s_index = 0
-			s_removes = []
-			for LS in src_lines:
-				if key in LS:
-					msgS('Not replacing old setting:\n\t{} -> {}'.format(LT, LS))
-					#tgt_lines[t_index] = LS
-					s_removes.append(s_index)
-
-					break
-
-				s_index += 1
-
-			t_index += 1
-
-			# Remove lines that are already in config with differenc value
-			for INDEX in reversed(s_removes):
-				src_lines.pop(INDEX)
-	'''
 
 	# Show message about new settings
 	msgS('New settings:')
