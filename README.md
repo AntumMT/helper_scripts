@@ -20,5 +20,11 @@ All scripts are licensed under [Creative Commons Zero (CC0)][lic.cc0].
 **luanti-server-update-config.py :** Updates server config (minetest.conf) from source file
 
 
+---
+### TODO
+
+- convert to Python scripts
+
+
 [Luanti]: https://www.luanti.org/
 [lic.cc0]: LICENSE.txt
