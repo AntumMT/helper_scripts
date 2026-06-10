@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Backs up server (world) data to a local directory
 
@@ -16,28 +16,28 @@ printf "\n\nRunning server backup ...\n"
 printf "\nChecking for world data ..."
 
 if [ -z ${WORLD_NAME+x} ]; then
-    WORLD_NAME="Antum"
+	WORLD_NAME="Antum"
 fi
 
 if [ -z ${WORLD+x} ]; then
-    SERVER_ROOT="/home/jordan/Games/Minetest/server"
-    WORLD_ROOT="${SERVER_ROOT}/worlds"
-    WORLD="${WORLD_ROOT}/${WORLD_NAME}"
+	DATA_ROOT="~/GameData/Luanti"
+	WORLD_ROOT="${DATA_ROOT}/worlds"
+	WORLD="${WORLD_ROOT}/${WORLD_NAME}"
 fi
 
 if [ -d "${WORLD}" ]; then
-    printf "\t${WORLD}\n"
+	printf "\t${WORLD}\n"
 else
-    printf "\tNOT FOUND!\n"
-    exit 1
+	printf "\tNOT FOUND!\n"
+	exit 1
 fi
 
 
-BACKUP_DIR="/home/jordan/Backup/Minetest"
-DATE=`show-date`
-TARGET_NAME="minetest-server-antum_${DATE}"
+BACKUP_DIR="${DATA_ROOT}/worlds_backup"
+DATE="$(date +%F_%H.%M.%S.$(date +%N | sed -e 's/\(...\).*/\1/'))"
+TARGET_NAME="Luanti_world_${WORLD_NAME}_${DATE}"
 TARGET_DIR="${BACKUP_DIR}/${TARGET_NAME}"
-LOG="${BACKUP_DIR}/minetest-backup.log"
+LOG="${BACKUP_DIR}/luanti-backup.log"
 
 if [ -e "${TARGET_DIR}" ]; then
 	echo "BACKUP ERROR: Backup already exists: ${TARGET_DIR}";

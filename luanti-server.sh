@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Launches the server using "main" parameters
 
@@ -13,30 +13,27 @@
 
 
 # Directory where this script & support scripts are located
-BINDIR=$(dirname $0)
+BINDIR="$(dirname $0)"
+cd "${BINDIR}"
+BINDIR=$(pwd)
 
 # Main game is named 'antum':
-## Symlink is located in /usr/share/minetest/games
-## Links to /home/jordan/Games/Minetest/games/antum
-GAME=antum
-GAME_ROOT="/home/jordan/Games/Minetest/games/antum"
+GAME="antum"
+GAME_ROOT="~/Development/Luanti/games/antum"
 
 # Main game uses port 30000
 PORT="30000"
 
 # Server settings
-SERVER_ROOT="/home/jordan/Games/Minetest/server"
-WORLD_ROOT="${SERVER_ROOT}/worlds"
 WORLD_NAME="Antum"
-DATA_ROOT="${SERVER_ROOT}/config/Antum"
 
 # Check for new setting values to add to configuration
-mtserver-update-config
+"${BINDIR}/luanti-server-update-config.py"
 
 # Import common variables & execute server
-. "${BINDIR}/minetest-common"
+. "${BINDIR}/luanti-common"
 
 echo -e "\nExit status: $?\n"
 
 # Run a server backup after shutdown
-. "${BINDIR}/mtserver-backup"
+. "${BINDIR}/luanti-server-backup.sh"

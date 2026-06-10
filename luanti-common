@@ -1,4 +1,4 @@
-# Common variables & instructions for mtserver-main & mtserver-testing scripts
+# Common variables & instructions for luanti-server & luanti-server-testing scripts
 
 # CC0 LICENSE BOILERPLATE
 #
@@ -12,38 +12,44 @@
 
 ARGS=$@
 
-MTROOT=/usr/share/minetest
-MTEXEC=/usr/bin/minetest
+# TODO: detect OS
+#~ LUANTI_ROOT=/usr/share/minetest
+#~ LUANTI_EXEC=/usr/bin/minetest
+LUANTI_ROOT="/c/Games/Luanti"
+LUANTI_EXEC="/c/Games/Luanti/bin/luanti.exe"
 
+DATA_ROOT="~/GameData/Luanti"
+WORLD_ROOT="${DATA_ROOT}/worlds"
+CONFIG_ROOT="${DATA_ROOT}/config/${WORLD_NAME}"
 WORLD="${WORLD_ROOT}/${WORLD_NAME}"
-CONFIG="${DATA_ROOT}/minetest.conf"
-LOG="${DATA_ROOT}/server.log"
+CONFIG="${CONFIG_ROOT}/minetest.conf"
+LOG="${CONFIG_ROOT}/server.log"
 
 if [ "${GAME}" == "antum" ]; then
-    LOG="${DATA_ROOT}/logs/server-$(show-date).log"
-    if [ ! -d "${DATA_ROOT}/logs" ]; then
-        mkdir -p "${DATA_ROOT}/logs"
+    LOG="${CONFIG_ROOT}/logs/server-$(show-date).log"
+    if [ ! -d "${CONFIG_ROOT}/logs" ]; then
+        mkdir -p "${CONFIG_ROOT}/logs"
     fi
 elif [ "${GAME}" == "antum-testing" ]; then
     CONFIG="${CONFIG}.example"
 fi
 
-SERVER_EXEC_COMMAND="${MTEXEC} --server --config ${CONFIG} --gameid ${GAME} --world ${WORLD} --port ${PORT} --logfile ${LOG} ${ARGS}"
+SERVER_EXEC_COMMAND="${LUANTI_EXEC} --server --config ${CONFIG} --gameid ${GAME} --world ${WORLD} --port ${PORT} --logfile ${LOG} ${ARGS}"
 
 
 # Tests
 
-printf "\nTesting for minetest executable ..."
-if [ -f "${MTEXEC}" ] && [ -x "${MTEXEC}" ]; then
-    printf "\t${MTEXEC}\n"
+printf "\nTesting for Luanti executable ..."
+if [ -f "${LUANTI_EXEC}" ] && [ -x "${LUANTI_EXEC}" ]; then
+    printf "\t${LUANTI_EXEC}\n"
 else
     printf "\tNO\n"
     exit 1
 fi
 
 printf "Testing for game ..."
-if [ -d "${MTROOT}/games/${GAME}" ]; then
-    printf "\t\t\t${MTROOT}/games/${GAME}\n"
+if [ -d "${LUANTI_ROOT}/games/${GAME}" ]; then
+    printf "\t\t\t${LUANTI_ROOT}/games/${GAME}\n"
 else
     printf "\t\tNO\n"
     exit 1
@@ -82,6 +88,6 @@ fi
 printf "Using port:\t\t\t\t${PORT}\n"
 
 
-printf "Executing minetest ...\n\n"
+printf "Executing Luanti ...\n\n"
 ${SERVER_EXEC_COMMAND}
 

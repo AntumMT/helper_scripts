@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Launches the server using "testing" parameters
 
@@ -13,23 +13,19 @@
 
 
 # Directory where this script & support scripts are located
-BINDIR=$(dirname $0)
+BINDIR="$(dirname $0)"
+cd "${BINDIR}"
+BINDIR=$(pwd)
 
 # Test game is named 'antum-testing'
-## Symlink is located in /usr/share/minetest/games
-## Links to /home/jordan/Development/Minetest/games/antum
-GAME=antum-testing
-GAME_ROOT="/home/jordan/Development/Minetest/games/antum"
+GAME="antum-testing"
+GAME_ROOT="~/Development/Luanti/games/antum"
 
 # Test game uses port 30001
 PORT="30001"
 
 # Server settings
-SERVER_ROOT="/home/jordan/Games/Minetest/server"
-WORLD_ROOT="${SERVER_ROOT}/worlds"
 WORLD_NAME="Antum_Testing"
-DATA_ROOT="${GAME_ROOT}"
 
 # Import common variables
-. "${BINDIR}/minetest-common"
-
+. "${BINDIR}/luanti-common"

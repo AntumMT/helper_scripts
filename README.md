@@ -1,4 +1,4 @@
-## Helper scripts for running my local [Minetest][] server
+## Helper scripts for running my local [Luanti] server
 
 
 ---
@@ -12,13 +12,13 @@ All scripts are licensed under [Creative Commons Zero (CC0)][lic.cc0].
 ---
 ### Descriptions
 
-**minetest-clear-cache.sh :** Clears the local Minetest cache directory<br>
-**minetest-common :** Common variables & instructions for *mtserver-main* & *mtserver-testing* scripts<br>
-**mtserver-backup.sh :** Backs up server (world) data to a local directory<br>
-**mtserver-main.sh :** Launches the server using "main" parameters<br>
-**mtserver-testing.sh :** Launches the server using "testing" parameters<br>
-**mtserver-update-config.py :** Updates server config (minetest.conf) from source file
+**luanti-clear-cache.sh :** Clears the local Luanti cache directory<br>
+**luanti-common :** Common variables & instructions for *luanti-server-main* & *luanti-server-testing* scripts<br>
+**luanti-server-backup.sh :** Backs up server (world) data to a local directory<br>
+**luanti-server-main.sh :** Launches the server using "main" parameters<br>
+**luanti-server-testing.sh :** Launches the server using "testing" parameters<br>
+**luanti-server-update-config.py :** Updates server config (minetest.conf) from source file
 
 
-[Minetest]: http://www.minetest.net/
+[Luanti]: https://www.luanti.org/
 [lic.cc0]: LICENSE.txt

@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Clears the local Minetest cache directory
+# Clears the local Luanti cache directory
 
 # CC0 LICENSE BOILERPLATE
 #
